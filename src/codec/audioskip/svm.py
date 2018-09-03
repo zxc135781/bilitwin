@@ -46,7 +46,7 @@ def plot_confusion_matrix(cm, classes,
 
 def plot_feature_contributions(clf, features_names):
     '''
-    this function plots the most discrimitive features of the classifier
+    this function plots the most discriminative features of the classifier
     '''
     plt.bar(features_names, clf.coef_[0], alpha=0.2)
     plt.title('SVM(linear): feature-contributions')
@@ -70,13 +70,12 @@ def main():
         clf = clf.best_estimator_
         joblib.dump(clf, EXISTING_MODEL_FILENAME)
 
-    pred_test = clf.predict(X_test)
     print(f'train accuracy={clf.score(X_train, y_train)}')
     print(f'test accuracy={clf.score(X_test, y_test)}')
+    pred_test = clf.predict(X_test)
 
     plt.figure()
-    cnf_matrix = confusion_matrix(y_test, pred_test) / len(y_test)
-    plot_confusion_matrix(cnf_matrix, classes=dataset.CLASS_NAMES, normalize=True)
+    plot_confusion_matrix(confusion_matrix(y_test, pred_test), classes=dataset.CLASS_NAMES, normalize=True)
 
     failed_cases = np.array(trace_test)
     failed_cases = failed_cases[np.where(y_test != pred_test)[0]]
